@@ -13,8 +13,8 @@ async function bootstrap() {
     .setDescription('A microsoft pirate server for xbox games')
     .setVersion('1.0.0')
     .addTag('status')
-    .addTag('user')
     .addTag('auth')
+    .addTag('user')
     .addBearerAuth()
     .build();
 
