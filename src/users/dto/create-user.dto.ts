@@ -7,20 +7,23 @@ import {
   IsPositive,
   IsString,
   Length,
+  Max,
+  Min,
+  MinLength,
 } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({
-    description: 'User name',
-    example: 'Leonardo Tinoco',
+    description: 'Name for the user',
+    example: 'Leonardo Orabona',
   })
   @IsString()
   @IsNotEmpty()
   name: string;
 
   @ApiProperty({
-    description: 'User email',
-    example: 'leonardo@blue.com.br',
+    description: 'User`s Email',
+    example: 'leo@blue.com.br',
   })
   @IsString()
   @IsNotEmpty()
@@ -28,26 +31,25 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty({
-    description: 'User Password',
-    example: 'abcd1234',
+    description: 'User`s Passaword',
+    example: 'Blue2022',
   })
   @IsString()
   @IsNotEmpty()
   password: string;
 
   @ApiProperty({
-    description: 'User CPF',
-    example: '11122233345',
+    description: 'User`s CPF number',
+    example: '123.123.123-12',
   })
-  @Length(11)
-  @IsNumber()
+  @Length(13, 14)
+  @IsString()
   @IsNotEmpty()
-  @IsPositive()
-  CPF: number;
+  CPF: string;
 
   @ApiProperty({
-    description: 'Check if user is admin (y/n)',
-    example: '',
+    description: 'If user is admin of server',
+    example: true,
   })
   @IsBoolean()
   isAdmin?: boolean;
