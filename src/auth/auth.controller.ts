@@ -9,7 +9,7 @@ import { LoginDto } from './dto/login.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post() // < Novo Decorator
+  @Post()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Realizar login, recebendo um token de autenticação',
