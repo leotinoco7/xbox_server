@@ -25,14 +25,24 @@ export class GamesService {
     return this.prisma.game.create({ data }).catch(handleError);
   }
 
-  async findAll() {
+  async findAll(skip: number) {
     const GameList = await this.prisma.game.findMany({
+      skip: skip,
+      take: 10,
       select: {
         id: true,
         title: true,
         coverImageURL: true,
         description: true,
         year: true,
+        genres: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        title: 'asc',
       },
     });
 
@@ -62,6 +72,7 @@ export class GamesService {
       include: {
         genres: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -90,5 +101,28 @@ export class GamesService {
     isAdmin(user);
     await this.prisma.game.delete({ where: { id } }).catch(handleError);
     return { message: 'Game successfully deleted' };
+  }
+
+  async imdbUpdate(id: string) {
+    let imdbScore = 0;
+
+    const game = await this.prisma.game
+      .findUnique({ where: { id: id } })
+      .catch(handleError);
+
+    const games = await this.prisma.profileGame.findMany({
+      where: { gameId: id },
+    });
+
+    games.forEach((g) => {
+      imdbScore += g.imdbScore;
+    });
+    imdbScore = imdbScore / games.length;
+
+    game.imdbScore = +imdbScore.toFixed(2);
+    return this.prisma.game.update({
+      where: { id: game.id },
+      data: game,
+    });
   }
 }

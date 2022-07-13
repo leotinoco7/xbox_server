@@ -2,10 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
   IsUUID,
+  Matches,
   Max,
   Min,
 } from 'class-validator';
@@ -47,14 +49,15 @@ export class CreateGameDto {
   year: number;
 
   @ApiProperty({
-    description: 'Rated score 0 - 5 (just integer numbers)',
+    description: 'Rated score 0 - 5',
     example: '3',
   })
-  @IsInt()
+  @IsNumber()
   @Min(0)
   @Max(5)
+  @IsOptional()
   @IsNotEmpty()
-  imdbScore: number;
+  imdbScore?: number;
 
   @ApiProperty({
     description: 'Trailer URL of the game on YOUTUBE',
@@ -63,6 +66,12 @@ export class CreateGameDto {
   @IsString()
   @IsNotEmpty()
   @IsUrl()
+  @Matches(
+    /(?:https?:\/\/)?(?:(?:(?:www\.?)?youtube\.com(?:\/(?:(?:watch\?.*?(v=[^&\s]+).*)|(?:v(\/.*))|(channel\/.+)|(?:user\/(.+))|(?:results\?(search_query=.+))))?)|(?:youtu\.be(\/.*)?))/,
+    {
+      message: 'the link must be a valid youtube link',
+    },
+  )
   trailerYouTubeUrl: string;
 
   @ApiProperty({
@@ -72,6 +81,12 @@ export class CreateGameDto {
   @IsString()
   @IsNotEmpty()
   @IsUrl()
+  @Matches(
+    /(?:https?:\/\/)?(?:(?:(?:www\.?)?youtube\.com(?:\/(?:(?:watch\?.*?(v=[^&\s]+).*)|(?:v(\/.*))|(channel\/.+)|(?:user\/(.+))|(?:results\?(search_query=.+))))?)|(?:youtu\.be(\/.*)?))/,
+    {
+      message: 'the link must be a valid youtube link',
+    },
+  )
   gameplayYouTubeUrl: string;
 
   @IsUUID('all', { each: true })

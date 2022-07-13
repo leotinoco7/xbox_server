@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoggedUser } from 'src/utils/logged-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { addGameDto } from './dto/add-game.dto';
+import { UpdateProfileGameDto } from './dto/update-game.dto';
 
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
@@ -50,6 +51,14 @@ export class ProfilesController {
   }
 
   @ApiOperation({
+    summary: 'Update a game on my profile',
+  })
+  @Patch('/updateGame')
+  updateGame(@Body() updateGame: UpdateProfileGameDto) {
+    return this.profilesService.updateGame(updateGame);
+  }
+
+  @ApiOperation({
     summary: 'Use to update partial or total a Profile by ID',
   })
   @Patch(':id')
@@ -71,5 +80,21 @@ export class ProfilesController {
   @Post('/addGame')
   addGame(@Body() addGame: addGameDto) {
     return this.profilesService.addGame(addGame);
+  }
+
+  @ApiOperation({
+    summary: 'Get a list of all games with a profile ID',
+  })
+  @Get('/listGames/:id')
+  listGames(@Param('id') id: string) {
+    return this.profilesService.listGames(id);
+  }
+
+  @ApiOperation({
+    summary: 'delete a game from a profile  with an ID',
+  })
+  @Delete('/DeleteGame/:id')
+  deleteGame(@Param('id') id: string) {
+    return this.profilesService.deleteGame(id);
   }
 }
